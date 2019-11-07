@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MIASHS-M2-TP3</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+
+  <app-root>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+      <script>
+          if (annyang) {
+            const commande = {
+            'add *val' : function(val) {
+            this.addTodo(val);
+            this.apply();
+            }
+            };
+                  annyang.addCommands(this.commande);
+                  annyang.debug();
+                  annyang.start();
+            }
+            </script>  
+    
+  </app-root>
+
+</body>
+</html>

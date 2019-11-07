@@ -1,0 +1,31 @@
+
+<div class="view"> 
+<tr>
+     <td>   <label class = 'todolabel' *ngIf="!edite; else editeTodo" (dblclick) = "setedite(true)" >{{getlabel()}} </label>
+                <ng-template #editeTodo>
+                    <input #inputData name = "inputData" type="text" class="todo-edite" [(ngModel)] = "item.label" (blur)="editeItem(inputData.value)" (keyup.enter)="editeItem(inputData.value)" (keyup.esc)="QuitterEdite(inputData.value)" autofocus>
+                  </ng-template>
+    
+        <!--  
+                            <input #inputData
+                          name    		= "inputData"
+                          class   		= "edit"
+                          [ngModel] 	= "getlabel()"
+                          (blur) 		  = "editeItem(inputData.value)"
+                          />
+                </form>!-->
+ </td>
+<td>    <button [ngStyle]="{'background-color': 'black'}" (click) = "supprimer()">
+                  &#x274C;  
+              </button>
+ </td>
+</tr>  
+               <input  style="width: calc(50% - 42px);" type		= "checkbox"
+                  name		= "fait"
+                  [ngModel] = "getIsCheck()"
+                  (ngModelChange) = "setIsCheck($event)"
+          />
+
+</div>
+
+

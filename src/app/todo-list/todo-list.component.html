@@ -1,0 +1,70 @@
+
+
+  <header >
+      <h1>TodoList du jour</h1>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs&callback=initMap">
+      </script>
+      <agm-map [latitude]="lat" [longitude]="lng">
+        <agm-marker 
+            *ngFor="let m of markers; let i = index"
+            (markerClick)="clickedMarker(m.label, i)"
+            [latitude]="m.lat"
+            [longitude]="m.lng"
+            [label]="m.label"
+            [markerDraggable]="m.draggable"
+            (dragEnd)="markerDragEnd(m, $event)">
+            
+          <agm-info-window>
+            <strong>{{getlabel()}}</strong>
+          </agm-info-window>
+          
+        </agm-marker>
+      </agm-map>
+ 
+      
+
+
+  <!-- 
+  <form id="gSearch" method="GET" #gSearch action="https://www.google.com/search">
+        <div id="voicesearch">
+            <input #searchKey name="q" type="hidden">
+            <div (click)="voiceSearch()" id ="iconic-mic">
+                    &#x1F3A5;            </div>
+             </div> 
+         </form>
+             --> 
+ 
+            <form (submit)="addTodo(inputData.value); inputData.value=''">
+            <input #inputData name="inputData" class="new-todo" placeholder="Ajouter une nouvelle tâche" autofocus />
+
+          <button type="submit" class="add">Ajouter</button>
+      </form>
+
+  </header>
+  <button type="button" 
+(click) = "Annuler()">&#8855; Annuler</button>
+
+<button type="button" 
+(click) = "Retablir()">&#8634; Rétablir</button>
+<div [hidden] = "vide()">
+      <input type="checkbox" name="toggleAll" [ngModel]="tousCheck()" (click)="changeCheck()" >
+      Tout cocher
+    </div>
+  <table>
+
+            <app-todo-item [data]="item"
+            *ngFor="let item of getitemfiltre()" class= 'todo-item' [ngClass]="{'checker' : item.check}" [class.edite]="cItem.edite"
+             #cItem>
+            </app-todo-item>
+      </table>
+   
+    <footer [hidden] = "vide()">
+      <span><strong></strong> {{tachesRestantes()}} {{affichagetache()}} </span>
+            <table>
+                <tr><td><a class="filterAll" (click)="filtreCourant = filterAll" [class.selected]="currentFilter === filterAll">Tous</a></td>
+                    <td><a class="Activesfiltre" (click)="filtreCourant = filterUnCheck" [class.selected]="filtreCourant === filterUnCheck">Actifs</a></td>
+                        <td> <a class="FiltreComplete" (click)="filtreCourant = filterCheck" [class.selected]="filtreCourant === filterCheck">Complétés</a></td>
+                        </tr>
+            </table>  
+      <button *ngIf="nbitemcoche()!==0" (click)="SuppTodoCoche()">Supprimer cochées</button>
+  </footer>
