@@ -1,5 +1,17 @@
 # MIASHS-M2-TP3-Projet
 
+Ce projet est une TodoList implémentée en Angular. Diverses fonctionnalités sont présentes telles que : 
+Undo/Redo, Effacer Tout , Reconnaissance vocale, Sérialisation / Déserialisation (LocalStorage), Geolocalisation.
+
+/!\ Concernant la géolocalisation, il faudra certainement rentrer une clé API Google qui est la suivante : 
+
+AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs
+
+## QUICK START 
+
+Clone the repo :
+
+git clone https://github.com/SoleneAndre/todolistinAngular.git
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
