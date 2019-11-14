@@ -4,7 +4,7 @@
       <h1>TodoList du jour</h1>
       <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs&callback=initMap">
       </script>
-      <agm-map [latitude]="lat" [longitude]="lng">
+      <agm-map #gmap id="gmap" [latitude]="lat" [longitude]="lng">
         <agm-marker 
             *ngFor="let m of markers; let i = index"
             (markerClick)="clickedMarker(m.label, i)"
@@ -21,18 +21,20 @@
         </agm-marker>
       </agm-map>
  
-      
 
-
-  <!-- 
   <form id="gSearch" method="GET" #gSearch action="https://www.google.com/search">
         <div id="voicesearch">
             <input #searchKey name="q" type="hidden">
-            <div (click)="voiceSearch()" id ="iconic-mic">
-                    &#x1F3A5;            </div>
-             </div> 
+            <div>
+            <img src="assets/img/micro.svg" 
+            alt="microphone"
+    height="87px"
+    width="100px"
+            (click)="voiceSearch()" id ="iconic-mic"/> 
+            </div>
+            </div>
          </form>
-             --> 
+
  
             <form (submit)="addTodo(inputData.value); inputData.value=''">
             <input #inputData name="inputData" class="new-todo" placeholder="Ajouter une nouvelle tâche" autofocus />

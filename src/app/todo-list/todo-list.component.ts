@@ -1,11 +1,11 @@
 /// <reference types="@types/googlemaps" />
-import {ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, ElementRef,ChangeDetectorRef} from '@angular/core';
 import {TodoListData} from '../dataTypes/TodoListData';
 import {TodoItemData} from '../dataTypes/TodoItemData';
 import { TodoService } from '../todo.service';
 import { MouseEvent } from '@agm/core';
 import { Marker } from '../marker';
-
+import { templateJitUrl } from '@angular/compiler';
 
 type FonctionFiltreItem = (item: TodoItemData) => boolean;
 declare var webkitSpeechRecognition: any;
@@ -20,6 +20,10 @@ declare var webkitSpeechRecognition: any;
 export class TodoListComponent implements OnInit {
   @ViewChild('gSearch', {static: false}) formSearch;
   @ViewChild('searchKey', {static: false}) hiddenSearchHandler;
+  @ViewChild('gmap', {static: false}) gmapElement: any;
+  map: google.maps.Map;
+
+
   lat = 51.678418;
   lng = 7.809007;
   // google maps zoom level
@@ -32,28 +36,30 @@ export class TodoListComponent implements OnInit {
   private dataitem: TodoItemData;
   private suppcacheEdite: string;
   itemLabel: any;
- markers: Marker[] = [
+  private newmarkers;
+
+
+
+ // tslint:disable-next-line: member-ordering
+ private markers: Marker[] = ([
     {
       lat: 51.673858,
       lng: 7.815982,
-      label: '1',
       draggable: true
     },
     {
       lat: 51.373858,
       lng: 7.215982,
-      label: '2',
       draggable: false
     },
     {
       lat: 51.723858,
       lng: 7.895982,
-      label: '3',
       draggable: true
     }
-  ];
+  ]);
 
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService) {}
   filterCheck: FonctionFiltreItem = item => item.check;
   filterUnCheck: FonctionFiltreItem = item => !item.check;
   filterAll: FonctionFiltreItem = () => true;
@@ -71,7 +77,6 @@ export class TodoListComponent implements OnInit {
   getitems(): TodoItemData[] {
     return this.data ? this.data.items : [];
   }
-
   addTodo(todoLabel: string) {
     if (todoLabel) {
      const val = confirm('Voulez-vous ajouter une localisation?');
@@ -80,26 +85,50 @@ export class TodoListComponent implements OnInit {
               // Si l'adresse n'est pas vide
       if (adresse !== '') {
         const geocoder =  new google.maps.Geocoder(); // On instancie le geocoder
+        const temp = this;
       geocoder.geocode( { 'address': adresse}, function(results, status) {
         if (status === google.maps.GeocoderStatus.OK) { // Si l'adresse a été résolue
         console.log('Geocoding complete!');
+        temp.lat  = results[0].geometry.location.lat();
+        temp.lng = results[0].geometry.location.lng();
+        console.log(this.lat, this.lng);
+        console.log(temp);
+        //const latLng = new google.maps.LatLng(this.lat, this.lng);
+
+            // this.map.setCenter(latLng);
+     //   const map = new google.maps.Map(this.gmap, {
+       //   zoom: 4,
+          //center: latLng,
+        //});
+
+        //const mark = new google.maps.Marker({
+          //position: latLng,
+          //map: map,
+          //title: 'Hello World!'
+       // });
+
+    /*    this.lat  = results[0].geometry.location.lat(),
+        this.lng = results[0].geometry.location.lng();
         console.log(this.lat);
         console.log(this.lng);
+        const newMarker = {
+          label: '',
+          draggable: true,
+          lat : results[0].geometry.location.lat(),
+          lng : results[0].geometry.location.lng()
+        };
+this.markers.push({
+      lat: this.lat,
+     lng: this.lng,
+      draggable: true
+          });
 
+*/
 
-} else {
+        } else {
             alert(' Quelque chose ne va pas' + status);
         }
-        this.lat  = results[0].geometry.location.lat(),
-        this.lng = results[0].geometry.location.lng();
-
-  });
-  this.markers.push({
-    lat: this.lat,
-    lng: this.lng,
-    label: '',
-    draggable: true
-});
+    /*});
 
   }
 }
@@ -131,6 +160,15 @@ this.todoService.addTodos({
     return this.data.items.reduce(
       (acc, item) => acc + (item.check ? 0 : 1), 0 );
   }*/
+});
+      }
+    }
+    this.todoService.addTodos({
+      label: todoLabel, check: false
+    });
+  }
+}
+
   tousCheck(): boolean {
     return this.getitems().reduce(
       (acc, item) => acc && item.check, true);
@@ -201,12 +239,13 @@ this.todoService.addTodos({
             console.log('dragEnd', m, $event);
           }
 
+
         // tslint:disable-next-line: no-unused-expression
         //'check la todo *val' : function(val){
         //this.items[parseInt(val)-1].check=true;
         //this.apply();
         //}
-/*  public voiceSearch() {
+ public voiceSearch() {
 
   if ('webkitSpeechRecognition' in Window) {
     const vSearch = new webkitSpeechRecognition();
@@ -235,5 +274,4 @@ this.todoService.addTodos({
     console.log('Votre navigateur ne supporte pas la reconnaissance vocale');
   }
     }
-    */
   }
