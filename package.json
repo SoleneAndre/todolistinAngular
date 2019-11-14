@@ -23,6 +23,7 @@
     "@angular/router": "^8.2.10",
     "@ionic-native/speech-recognition": "^5.16.0",
     "@ionic/angular": "^4.11.3",
+    "@ng-bootstrap/ng-bootstrap": "^5.1.4",
     "core-js": "^2.4.1",
     "rxjs": "^6.5.3",
     "rxjs-compat": "^6.0.0-rc.0",

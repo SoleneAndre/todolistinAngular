@@ -1,14 +1,18 @@
 /// <reference types="@types/googlemaps" />
-import {ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, ElementRef,ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, NgZone, Input, OnInit, ViewChild, ElementRef,ChangeDetectorRef} from '@angular/core';
 import {TodoListData} from '../dataTypes/TodoListData';
 import {TodoItemData} from '../dataTypes/TodoItemData';
 import { TodoService } from '../todo.service';
-import { MouseEvent } from '@agm/core';
-import { Marker } from '../marker';
+import { MouseEvent, AgmMap, MapsAPILoader} from '@agm/core';
+import { Marker } from '../dataTypes/map';
+import { Location } from '../dataTypes/map';
 import { templateJitUrl } from '@angular/compiler';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
 
 type FonctionFiltreItem = (item: TodoItemData) => boolean;
 declare var webkitSpeechRecognition: any;
+declare var google: any;
 
 @Component({
   selector: 'app-todo-list',
@@ -20,14 +24,8 @@ declare var webkitSpeechRecognition: any;
 export class TodoListComponent implements OnInit {
   @ViewChild('gSearch', {static: false}) formSearch;
   @ViewChild('searchKey', {static: false}) hiddenSearchHandler;
-  @ViewChild('gmap', {static: false}) gmapElement: any;
-  map: google.maps.Map;
-
-
-  lat = 51.678418;
-  lng = 7.809007;
-  // google maps zoom level
-  zoom = 8;
+  @ViewChild('gMap', {static: false}) gmapElement: any;
+  @ViewChild(AgmMap, {static: false}) map: AgmMap;
 
   @Input()
   private data: TodoListData;
@@ -37,29 +35,29 @@ export class TodoListComponent implements OnInit {
   private suppcacheEdite: string;
   itemLabel: any;
   private newmarkers;
-
-
-
- // tslint:disable-next-line: member-ordering
- private markers: Marker[] = ([
-    {
-      lat: 51.673858,
-      lng: 7.815982,
+  private geocoder: any;
+  public location: Location = {
+    lat: 51.678418,
+    lng: 7.809007,
+    marker: {
+      lat: 51.678418,
+      lng: 7.809007,
       draggable: true
     },
-    {
-      lat: 51.373858,
-      lng: 7.215982,
-      draggable: false
-    },
-    {
-      lat: 51.723858,
-      lng: 7.895982,
-      draggable: true
-    }
-  ]);
+    zoom: 5
+  };
 
-  constructor(private todoService: TodoService) {}
+  constructor(private todoService: TodoService, public mapsApiLoader: MapsAPILoader,
+    private zone: NgZone,
+    private wrapper: GoogleMapsAPIWrapper) {
+this.mapsApiLoader = mapsApiLoader;
+this.zone = zone;
+this.wrapper = wrapper;
+this.mapsApiLoader.load().then(() => {
+this.geocoder = new google.maps.Geocoder();
+});
+}
+
   filterCheck: FonctionFiltreItem = item => item.check;
   filterUnCheck: FonctionFiltreItem = item => !item.check;
   filterAll: FonctionFiltreItem = () => true;
@@ -68,6 +66,7 @@ export class TodoListComponent implements OnInit {
 
   ngOnInit() {
     this.filtre = 'toutes';
+    this.location.marker.draggable = true;
   }
 
   getlabel(): string {
@@ -77,92 +76,59 @@ export class TodoListComponent implements OnInit {
   getitems(): TodoItemData[] {
     return this.data ? this.data.items : [];
   }
+  findLocation(address) {
+    if (!this.geocoder) { this.geocoder = new google.maps.Geocoder(); }
+    this.geocoder.geocode({
+      'address': address
+    }, (results, status) => {
+      console.log(results);
+      if (status === google.maps.GeocoderStatus.OK) {
+        for (let i = 0; i < results[0].address_components.length; i++) {
+          const types = results[0].address_components[i].types;
+
+          if (types.indexOf('locality') !== -1) {
+            this.location.address_level_2 = results[0].address_components[i].long_name;
+          }
+          if (types.indexOf('country') !== -1) {
+            this.location.address_country = results[0].address_components[i].long_name;
+          }
+          if (types.indexOf('postal_code') !== -1) {
+            this.location.address_zip = results[0].address_components[i].long_name;
+          }
+          if (types.indexOf('administrative_area_level_1') !== -1) {
+            this.location.address_state = results[0].address_components[i].long_name;
+          }
+        }
+
+        if (results[0].geometry.location) {
+          this.location.lat = results[0].geometry.location.lat();
+          this.location.lng = results[0].geometry.location.lng();
+          this.location.marker.lat = results[0].geometry.location.lat();
+          this.location.marker.lng = results[0].geometry.location.lng();
+          this.location.marker.draggable = true;
+          this.location.viewport = results[0].geometry.viewport;
+        }
+        this.map.triggerResize();
+      } else {
+        alert('Sorry, this search produced no results.');
+      }
+    });
+  }
+  updateOnMap() {
+    let full_address: string = this.location.address_level_1 || '';
+    if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
+    if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
+    if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
+
+    this.findLocation(full_address);
+  }
+
   addTodo(todoLabel: string) {
     if (todoLabel) {
-     const val = confirm('Voulez-vous ajouter une localisation?');
-       if (val === true) {
-      const adresse = prompt('Ville de la nouvelle TODO :)', '');
-              // Si l'adresse n'est pas vide
-      if (adresse !== '') {
-        const geocoder =  new google.maps.Geocoder(); // On instancie le geocoder
-        const temp = this;
-      geocoder.geocode( { 'address': adresse}, function(results, status) {
-        if (status === google.maps.GeocoderStatus.OK) { // Si l'adresse a été résolue
-        console.log('Geocoding complete!');
-        temp.lat  = results[0].geometry.location.lat();
-        temp.lng = results[0].geometry.location.lng();
-        console.log(this.lat, this.lng);
-        console.log(temp);
-        //const latLng = new google.maps.LatLng(this.lat, this.lng);
-
-            // this.map.setCenter(latLng);
-     //   const map = new google.maps.Map(this.gmap, {
-       //   zoom: 4,
-          //center: latLng,
-        //});
-
-        //const mark = new google.maps.Marker({
-          //position: latLng,
-          //map: map,
-          //title: 'Hello World!'
-       // });
-
-    /*    this.lat  = results[0].geometry.location.lat(),
-        this.lng = results[0].geometry.location.lng();
-        console.log(this.lat);
-        console.log(this.lng);
-        const newMarker = {
-          label: '',
-          draggable: true,
-          lat : results[0].geometry.location.lat(),
-          lng : results[0].geometry.location.lng()
-        };
-this.markers.push({
-      lat: this.lat,
-     lng: this.lng,
-      draggable: true
-          });
-
-*/
-
-        } else {
-            alert(' Quelque chose ne va pas' + status);
-        }
-    /*});
-
-  }
-}
-this.todoService.addTodos({
-  label: todoLabel, check: false
-});
-  }
-}
-
-  setTodoCheck(item: TodoItemData, check: boolean, edite: boolean) {
-    this.todoService.setTodosCheck(check, true, item);
-  }
-
-  changeCheck() {
-    const check = !this.tousCheck();
-    let AnnulerRetablir = false;
-    for (let i = 0; i < this.data.items.length; i++ ) {
-      if (i === this.data.items.length - 1) {
-        AnnulerRetablir = true;
-      }
-      this.todoService.setTodosCheck(check, AnnulerRetablir, this.data.items[i] );
-  }
-  }
-/* TodoCheck(): number {
-    return this.data.items.reduce(
-      (acc, item) => acc + (item.check ? 1 : 0), 0);
-  }
- TodoUncheck(): number {
-    return this.data.items.reduce(
-      (acc, item) => acc + (item.check ? 0 : 1), 0 );
-  }*/
-});
-      }
-    }
+      const val = confirm('Voulez-vous ajouter une localisation?');
+      if (val === true) {
+        const adress = prompt('Quel ville souhaitez-vous ajouter?', '');
+        this.findLocation(adress); }
     this.todoService.addTodos({
       label: todoLabel, check: false
     });
@@ -176,12 +142,6 @@ this.todoService.addTodos({
   vide() {
     return this.getitems().length === 0;
   }
-  /*  getTachesRestantes(): string {
-    return this.todos.filter(todo => !todo.check).length;
-          return 'Tâches restantes';
-        }
-        return 'Tâche restante';
-        }  */
       SuppTodoCoche() {
         let AnnulerRetablir = false;
         for ( let i = 0; i < this.getitems().filter(item => item.check).length; i++ ) {
@@ -203,9 +163,7 @@ this.todoService.addTodos({
         getitemfiltre(): TodoItemData[] {
           return this.getitems().filter(this.filtreCourant);
         }
-     //     AumoinsunComplete(): boolean {
-      //      return this.todos.filter(todo => todo.check).length > 0;
-        //    }
+
         nbitemcoche(): number {
           return this.data.items.reduce(
             (acc, item) => acc + (item.check ? 1 : 0), 0 );
@@ -219,32 +177,8 @@ this.todoService.addTodos({
           } else {
               return 'Tâche restante';
             }
-
         }
-          // initial center position for the map
 
-         clickedMarker(label: string, index: number) {
-            console.log(`clicked the marker: ${label || index}`);
-          }
-
-          mapClicked($event: MouseEvent) {
-            this.markers.push({
-              lat: $event.coords.lat,
-              lng: $event.coords.lng,
-              draggable: true
-            });
-          }
-
-          markerDragEnd(m: Marker, $event: MouseEvent) {
-            console.log('dragEnd', m, $event);
-          }
-
-
-        // tslint:disable-next-line: no-unused-expression
-        //'check la todo *val' : function(val){
-        //this.items[parseInt(val)-1].check=true;
-        //this.apply();
-        //}
  public voiceSearch() {
 
   if ('webkitSpeechRecognition' in Window) {
