@@ -1,5 +1,5 @@
 /// <reference types="@types/googlemaps" />
-import {ChangeDetectionStrategy, Component, NgZone, Input, OnInit, ViewChild, ElementRef,ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, NgZone, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
 import {TodoListData} from '../dataTypes/TodoListData';
 import {TodoItemData} from '../dataTypes/TodoItemData';
 import { TodoService } from '../todo.service';
@@ -9,9 +9,11 @@ import { Location } from '../dataTypes/map';
 import { templateJitUrl } from '@angular/compiler';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
+import SpeechRecognizer from 'simple-speech-recognition';
+import { VirtualTimeScheduler } from 'rxjs';
 
 type FonctionFiltreItem = (item: TodoItemData) => boolean;
-declare var webkitSpeechRecognition: any;
+// declare var webkitSpeechRecognition: any;
 declare var google: any;
 
 @Component({
@@ -29,44 +31,30 @@ export class TodoListComponent implements OnInit {
 
   @Input()
   private data: TodoListData;
-  private filtre: string;
-  private edite = false;
   private dataitem: TodoItemData;
-  private suppcacheEdite: string;
   itemLabel: any;
-  private newmarkers;
+  private infoWindow: string;
   private geocoder: any;
-  public location: Location = {
-    lat: 51.678418,
-    lng: 7.809007,
-    marker: {
-      lat: 51.678418,
-      lng: 7.809007,
-      draggable: true
-    },
-    zoom: 5
-  };
+  private filtre: string;
 
   constructor(private todoService: TodoService, public mapsApiLoader: MapsAPILoader,
     private zone: NgZone,
     private wrapper: GoogleMapsAPIWrapper) {
-this.mapsApiLoader = mapsApiLoader;
-this.zone = zone;
-this.wrapper = wrapper;
-this.mapsApiLoader.load().then(() => {
-this.geocoder = new google.maps.Geocoder();
+    this.mapsApiLoader = mapsApiLoader;
+    this.zone = zone;
+    this.wrapper = wrapper;
+    this.mapsApiLoader.load().then(() => {
+    this.geocoder = new google.maps.Geocoder();
 });
 }
-
-  filterCheck: FonctionFiltreItem = item => item.check;
-  filterUnCheck: FonctionFiltreItem = item => !item.check;
-  filterAll: FonctionFiltreItem = () => true;
+    filterCheck: FonctionFiltreItem = item => item.check;
+    filterUnCheck: FonctionFiltreItem = item => !item.check;
+    filterAll: FonctionFiltreItem = () => true;
   // tslint:disable-next-line: member-ordering
   filtreCourant: FonctionFiltreItem = this.filterAll;
 
   ngOnInit() {
     this.filtre = 'toutes';
-    this.location.marker.draggable = true;
   }
 
   getlabel(): string {
@@ -76,68 +64,36 @@ this.geocoder = new google.maps.Geocoder();
   getitems(): TodoItemData[] {
     return this.data ? this.data.items : [];
   }
-  findLocation(address) {
-    if (!this.geocoder) { this.geocoder = new google.maps.Geocoder(); }
-    this.geocoder.geocode({
-      'address': address
-    }, (results, status) => {
-      console.log(results);
-      if (status === google.maps.GeocoderStatus.OK) {
-        for (let i = 0; i < results[0].address_components.length; i++) {
-          const types = results[0].address_components[i].types;
-
-          if (types.indexOf('locality') !== -1) {
-            this.location.address_level_2 = results[0].address_components[i].long_name;
-          }
-          if (types.indexOf('country') !== -1) {
-            this.location.address_country = results[0].address_components[i].long_name;
-          }
-          if (types.indexOf('postal_code') !== -1) {
-            this.location.address_zip = results[0].address_components[i].long_name;
-          }
-          if (types.indexOf('administrative_area_level_1') !== -1) {
-            this.location.address_state = results[0].address_components[i].long_name;
-          }
-        }
-
-        if (results[0].geometry.location) {
-          this.location.lat = results[0].geometry.location.lat();
-          this.location.lng = results[0].geometry.location.lng();
-          this.location.marker.lat = results[0].geometry.location.lat();
-          this.location.marker.lng = results[0].geometry.location.lng();
-          this.location.marker.draggable = true;
-          this.location.viewport = results[0].geometry.viewport;
-        }
-        this.map.triggerResize();
-      } else {
-        alert('Sorry, this search produced no results.');
-      }
-    });
-  }
-  updateOnMap() {
-    let full_address: string = this.location.address_level_1 || '';
-    if (this.location.address_level_2) { full_address = full_address + ' ' + this.location.address_level_2; }
-    if (this.location.address_state) { full_address = full_address + ' ' + this.location.address_state; }
-    if (this.location.address_country) { full_address = full_address + ' ' + this.location.address_country; }
-
-    this.findLocation(full_address);
-  }
 
   addTodo(todoLabel: string) {
-    if (todoLabel) {
-      const val = confirm('Voulez-vous ajouter une localisation?');
-      if (val === true) {
-        const adress = prompt('Quel ville souhaitez-vous ajouter?', '');
-        this.findLocation(adress); }
-    this.todoService.addTodos({
-      label: todoLabel, check: false
-    });
+      if (todoLabel) {
+  this.todoService.addTodos({
+    label: todoLabel, check: false, location :
+    {
+      lat: 50.1,
+      lng: 5.7,
+      viewport: Object,
+      zoom: 5,
+      marker : {
+        lat: 50.1,
+        lng: 5.7,
+        draggable: true
+      }
+    },
+    map : new google.maps.Geocoder()
+  });
   }
-}
+  }
 
+  gettodoLabel() {
+    return this.dataitem.label;
+  }
   tousCheck(): boolean {
     return this.getitems().reduce(
       (acc, item) => acc && item.check, true);
+  }
+  infoWindows() {
+    return this.infoWindow;
   }
   vide() {
     return this.getitems().length === 0;
@@ -154,6 +110,7 @@ this.geocoder = new google.maps.Geocoder();
        supprimerTodo(item: TodoItemData, AnnulerRetablir: boolean) {
           this.todoService.supprimerTodos(AnnulerRetablir, item);
         }
+
         Annuler(): void {
           this.todoService.Actionannuler();
         }
@@ -178,34 +135,28 @@ this.geocoder = new google.maps.Geocoder();
               return 'Tâche restante';
             }
         }
+        setTodoCheck(item: TodoItemData, check: boolean, edite: boolean) {
+          this.todoService.setTodosCheck(check, true, item);
+        }
 
- public voiceSearch() {
+        changeCheck() {
+          const check = !this.tousCheck();
+          let AnnulerRetablir = false;
+          for (let i = 0; i < this.data.items.length; i++ ) {
+            if (i === this.data.items.length - 1) {
+              AnnulerRetablir = true;
+            }
+            this.todoService.setTodosCheck(check, AnnulerRetablir, this.data.items[i] );
+        }
+        }
 
-  if ('webkitSpeechRecognition' in Window) {
-    const vSearch = new webkitSpeechRecognition();
-    vSearch.continuous = false;
-    vSearch.interimresults = false;
-    vSearch.lang = 'en-US';
-    vSearch.start();
-    const voiceSearchForm = this.formSearch.nativeElement;
-    const voiceHandler = this.hiddenSearchHandler.nativeElement;
-    vSearch.onresult = function(e) {
-      voiceHandler.value = e.results[0][0].transcript;
-      vSearch.stop();
-      voiceSearchForm.submit();
-    };
-    vSearch.onresult = (e) => {
-      this.formSearch = e.results[0][0].transcript;
-      this.hiddenSearchHandler(this.formSearch);
-      vSearch.stop();
-    };
+   voiceSearch() {
+  const speechRecognizer = new SpeechRecognizer({
+      resultCallback: ({ transcript, finished }) => this.addTodo(transcript)
+  , lang: 'en-US'
+}
+);
+speechRecognizer.start();
 
-    vSearch.onerror = function(e) {
-      console.log(e);
-      vSearch.stop();
-    };
-  } else {
-    console.log('Votre navigateur ne supporte pas la reconnaissance vocale');
-  }
-    }
+   }
   }

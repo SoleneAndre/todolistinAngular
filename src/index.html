@@ -11,21 +11,6 @@
 <body>
 
   <app-root>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
-      <script>
-          if (annyang) {
-            const commande = {
-            'add *val' : function(val) {
-            this.addTodo(val);
-            this.apply();
-            }
-            };
-                  annyang.addCommands(this.commande);
-                  annyang.debug();
-                  annyang.start();
-            }
-            </script>  
-    
   </app-root>
 
 </body>
