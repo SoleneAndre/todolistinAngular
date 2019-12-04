@@ -1,20 +1,17 @@
 # MIASHS-M2-TP3-Projet
 
-Ce projet est une TodoList implémentée en Angular 8. :EMOJICODE: :blush:
+Ce projet est une TodoList implémentée en Angular 8. :blush:
 
-/!\ Concernant la géolocalisation, il faudra certainement rentrer une clé API Google qui est la suivante : 
+:heavy_exclamation_mark: Concernant la géolocalisation, il faudra certainement rentrer une clé API Google qui est la suivante : 
 
 AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs
 
-## Liste des fonctionnalités développées
+## Liste des fonctionnalités développées :computer:
 
 Diverses fonctionnalités sont présentes telles que : 
 Undo/Redo, Effacer Tout , Reconnaissance vocale, Sérialisation / Déserialisation (LocalStorage), Geolocalisation.
 
 Concernant la geolocalisation j'ai choisi de l'implementer avec Google Map. 
-Vous pouvez trouver ici le lien de l'API google :
-[Ici](https://cloud.google.com/maps-platform/?hl=fr
-)
 
 Pour la Reconnaissance vocale, j'ai utilisé un module existant nommé ngx-speech-recognition. 
 
@@ -26,7 +23,6 @@ Google Maps API | [Ici](https://cloud.google.com/maps-platform/?hl=fr
 )
 Ngx Speech Recognition  | [Ici](https://www.npmjs.com/package/@kamiazya/ngx-speech-recognition
 )
-
 
 
 ## QUICK START 
