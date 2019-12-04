@@ -28,7 +28,7 @@ Ngx Speech Recognition  | [Ici](https://www.npmjs.com/package/@kamiazya/ngx-spee
 **:one: Map Google**
 
 :earth_americas: 
- *Avant de me lancer dans l’implémentation de la Google map , j'ai cherché comment je pourrais intégrer une map dans mon code. J'ai essayé plusieurs API google map avant de trouver la Google Map , notamment "angular-maps" , mais qui n'avait pas assez de méthodes et pas assez intuitif.
+ *Avant de me lancer dans l’implémentation de la Google map , j'ai cherché comment je pourrais intégrer une map dans mon code. J'ai essayé plusieurs API google map avant de trouver la Google Map , notamment "angular-maps" , mais qui n'avait pas assez de méthodes et pas assez intuitif.*
 Après beaucoup de recherches, je me suis finalement orientée vers la google maps API. Je me suis donc créer un compte Clou Developpeur Google pour pouvoir utiliser leur API qui sont désormais accessible seulement via un compte.
 J'ai donc crée un projet puis demander une clé API Google Map, et ensuite activer divers modules (Geolocation, Geocoding,..).
 
@@ -76,8 +76,4 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-## Difficultés rencontrées 
-
-
 
