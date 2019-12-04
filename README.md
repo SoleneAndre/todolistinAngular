@@ -24,7 +24,7 @@ Ngx Speech Recognition  | [Ici](https://www.npmjs.com/package/@kamiazya/ngx-spee
 
 ### Détails sur chaque fonctionnalité 
 
-:earth_americas: **1. Map Google **
+:earth_americas: **1. Map Google ** map
 * Avant de me lancer dans l’implémentation de la Google map , j'ai cherché comment je pourrais intégrer une map dans mon code. J'ai essayeé plusieurs API google map avant de trouver la Google Map , notamment "angular-maps" , mais qui n'avait pas assez de méthodes et pas assez ''
    *
 
