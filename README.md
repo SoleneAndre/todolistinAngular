@@ -24,9 +24,17 @@ Ngx Speech Recognition  | [Ici](https://www.npmjs.com/package/@kamiazya/ngx-spee
 
 ### Détails sur chaque fonctionnalité 
 
-:earth_americas: **1. Map Google ** map
-* Avant de me lancer dans l’implémentation de la Google map , j'ai cherché comment je pourrais intégrer une map dans mon code. J'ai essayeé plusieurs API google map avant de trouver la Google Map , notamment "angular-maps" , mais qui n'avait pas assez de méthodes et pas assez ''
-   *
+:earth_americas: 
+
+__ 1. Map Google __ 
+_ Avant de me lancer dans l’implémentation de la Google map , j'ai cherché comment je pourrais intégrer une map dans mon code. J'ai essayé plusieurs API google map avant de trouver la Google Map , notamment "angular-maps" , mais qui n'avait pas assez de méthodes et pas assez intuitif.
+Après beaucoup de recherches, je me suis finalement orientée vers la google maps API. Je me suis donc créer un compte Clou Developpeur Google pour pouvoir utiliser leur API qui sont désormais accessible seulement via un compte.
+J'ai donc crée un projet puis demander une clé API Google Map, et ensuite activer divers modules (Geolocation, Geocoding,..).
+
+J'ai rencontré quelques difficultés pour implémenter au mieux cette map, notamment lorsque l'utilisateur entre une adresse, il fallait récupérer la latitude ainsi que la longitude, il a été difficile de trouver une fonction et ensuite de la positioner sur la map. De plus , il a été difficile de trouver comment utiliser cet API au sein d'une Todolist. Au départ , j'avais positionné une seule carte , mais finalement j'ai trouve ça mieux de laisser le choix à l'utilisateur pour chacun de ses items._
+
+__ 2. Reconnaissance vocale __ 
+_ ._
 
 ## QUICK START 
 
