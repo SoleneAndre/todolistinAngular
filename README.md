@@ -7,6 +7,11 @@ Undo/Redo, Effacer Tout , Reconnaissance vocale, Sérialisation / Déserialisati
 
 AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs
 
+Concernant la geolocalisation j'ai choisi de l'implementer avec Google Map. 
+Vous pouvez trouver ici le lien de l'API google : https://cloud.google.com/maps-platform/?hl=fr - automatic!
+[GitHub](https://cloud.google.com/maps-platform/?hl=fr
+)
+
 ## QUICK START 
 
 Clone the repo :
@@ -35,3 +40,8 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Difficultés rencontrées 
+
+
+
