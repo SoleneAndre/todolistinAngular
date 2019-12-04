@@ -8,8 +8,8 @@ Undo/Redo, Effacer Tout , Reconnaissance vocale, Sérialisation / Déserialisati
 AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs
 
 Concernant la geolocalisation j'ai choisi de l'implementer avec Google Map. 
-Vous pouvez trouver ici le lien de l'API google : https://cloud.google.com/maps-platform/?hl=fr - automatic!
-[GitHub](https://cloud.google.com/maps-platform/?hl=fr
+Vous pouvez trouver ici le lien de l'API google :
+[Ici](https://cloud.google.com/maps-platform/?hl=fr
 )
 
 ## QUICK START 
