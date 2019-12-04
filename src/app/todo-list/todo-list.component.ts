@@ -12,7 +12,6 @@ import {
 } from '@kamiazya/ngx-speech-recognition';
 
 type FonctionFiltreItem = (item: TodoItemData) => boolean;
-// declare var webkitSpeechRecognition: any;
 declare var google: any;
 
 @Component({
