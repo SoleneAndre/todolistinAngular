@@ -1,21 +1,27 @@
 
-<div class="view"> 
+<div>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs&callback=initMap">
+    </script>
+    <agm-map *ngIf = "ajoutville===false" [(latitude)]="location.lat" [(longitude)]="location.lng" [(zoom)]="location.zoom" [disableDefaultUI]="true" [zoomControl]="true" [(fitBounds)]='location.viewport'>
+    <agm-marker [(latitude)]="location.marker.lat" [(longitude)]="location.marker.lng" [markerDraggable]="location.marker.draggable" (dragEnd)='markerDragEnd($event)'>
+      <agm-info-window #infoWindow [disableAutoPan]="true">
+        {{getlabel()}}
+      </agm-info-window>
+    </agm-marker>  
+  </agm-map>
+  </div>
+  <div class="view"> 
 <tr>
-     <td>   <label class = 'todolabel' *ngIf="!edite; else editeTodo" (dblclick) = "setedite(true)" >{{getlabel()}} </label>
+     <td>  <label class = 'todolabel' *ngIf="!edite; else editeTodo" (dblclick) = "setedite(true)" >{{getlabel()}} </label>
+      <input [hidden]= "ajoutville" type ="button" value="Ajout Ville" (click)= "ajoutVille()"/>
+     <!-- // <input type="button" value="voir Ville" (click) = "voirVille()"/> -->
+      <a *ngIf = "ajoutville===false" href= {{lienGoogle}}> Voir ville</a>
                 <ng-template #editeTodo>
                     <input #inputData name = "inputData" type="text" class="todo-edite" [(ngModel)] = "item.label" (blur)="editeItem(inputData.value)" (keyup.enter)="editeItem(inputData.value)" (keyup.esc)="QuitterEdite(inputData.value)" autofocus>
                   </ng-template>
-    
-        <!--  
-                            <input #inputData
-                          name    		= "inputData"
-                          class   		= "edit"
-                          [ngModel] 	= "getlabel()"
-                          (blur) 		  = "editeItem(inputData.value)"
-                          />
-                </form>!-->
  </td>
-<td>    <button [ngStyle]="{'background-color': 'black'}" (click) = "supprimer()">
+<td>   
+   <button [ngStyle]="{'background-color': 'black'}" (click) = "supprimer()">
                   &#x274C;  
               </button>
  </td>
@@ -27,5 +33,6 @@
           />
 
 </div>
+
 
 

@@ -2,47 +2,21 @@
 
   <header >
       <h1>TodoList du jour</h1>
-      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs&callback=initMap">
-      </script>
-      <agm-map #gmap id="gmap" [latitude]="lat" [longitude]="lng">
-        <agm-marker 
-            *ngFor="let m of markers; let i = index"
-            (markerClick)="clickedMarker(m.label, i)"
-            [latitude]="m.lat"
-            [longitude]="m.lng"
-            [label]="m.label"
-            [markerDraggable]="m.draggable"
-            (dragEnd)="markerDragEnd(m, $event)">
-            
-          <agm-info-window>
-            <strong>{{getlabel()}}</strong>
-          </agm-info-window>
-          
-        </agm-marker>
-      </agm-map>
- 
 
-  <form id="gSearch" method="GET" #gSearch action="https://www.google.com/search">
-        <div id="voicesearch">
-            <input #searchKey name="q" type="hidden">
-            <div>
-            <img src="assets/img/micro.svg" 
-            alt="microphone"
-    height="87px"
-    width="100px"
-            (click)="voiceSearch()" id ="iconic-mic"/> 
-            </div>
-            </div>
-         </form>
-
- 
-            <form (submit)="addTodo(inputData.value); inputData.value=''">
+ <form (submit)="addTodo(inputData.value); inputData.value=''">
             <input #inputData name="inputData" class="new-todo" placeholder="Ajouter une nouvelle tâche" autofocus />
 
           <button type="submit" class="add">Ajouter</button>
+                <div>
+                <img style="margin-top:-50px" src="./assets/img/micro.svg" 
+                alt="microphone"
+        height="50px"
+        width="50px"
+                (click)="voiceSearch()" id ="iconic-mic"/> 
+                </div>
       </form>
 
-  </header>
+
   <button type="button" 
 (click) = "Annuler()">&#8855; Annuler</button>
 
@@ -53,13 +27,13 @@
       Tout cocher
     </div>
   <table>
-
+  
             <app-todo-item [data]="item"
             *ngFor="let item of getitemfiltre()" class= 'todo-item' [ngClass]="{'checker' : item.check}" [class.edite]="cItem.edite"
              #cItem>
             </app-todo-item>
       </table>
-   
+
     <footer [hidden] = "vide()">
       <span><strong></strong> {{tachesRestantes()}} {{affichagetache()}} </span>
             <table>
