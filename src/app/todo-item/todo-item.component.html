@@ -15,7 +15,7 @@
      <td>  <label class = 'todolabel' *ngIf="!edite; else editeTodo" (dblclick) = "setedite(true)" >{{getlabel()}} </label>
       <input *ngIf = "ajoutville===true" type ="button" value="Ajout Ville" (click)= "ajoutVille()"/>      
       <a *ngIf = "ajoutville===false" href= {{lienGoogle}}  target="_blank"> Voir ville</a>
-    <p *ngIf = "ajoutville===false" id="villechange">La ville de ce todo est : {{getville()}}</p>
+   <strong>La ville de ce todo est : </strong> <p *ngIf = "ajoutville===false" id="villechange">{{getville()}}</p>
                 <ng-template #editeTodo>
                     <input #inputData name = "inputData" type="text" class="todo-edite" [(ngModel)] = "item.label" (blur)="editeItem(inputData.value)" (keyup.enter)="editeItem(inputData.value)" (keyup.esc)="QuitterEdite(inputData.value)" autofocus>
                   </ng-template>
