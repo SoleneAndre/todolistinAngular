@@ -25,7 +25,7 @@ Ngx Speech Recognition  | [Ici](https://www.npmjs.com/package/@kamiazya/ngx-spee
 ### Détails sur chaque fonctionnalité 
 
 
-**:one: Map Google**
+**:one:. Map Google**
 
 
 :earth_americas: 
@@ -48,6 +48,8 @@ J'ai donc crée un projet puis demander une clé API Google Map, et ensuite acti
 *La principale difficulte rencontrée a été au départ de savoir où implémenter la reconnaissance vocale, avec annyang il fallait directement la mettre dans index.html sinon ça ne fonctionnait pas. Donc ce n’était pas possible de directement ajouter la todoList. Il m'a fallu du temps avant de trouver une autre manière de faire fonctionner le code correctement , qu'il reconnaissance bien la voix et qu'il ajoute directement la todo.*
 
 **:three:. Autre difficulté rencontrée**
+
+:warning:
 
 *Étant plutot novice en TypeScript , cela a été plutôt difficile au départ pour m’imprégner d'Angular et son fonctionnement. J'ai dû regarder beaucoup de tutos , passer beaucoup de temps pour comprendre chaque composant, les méthodes,etc...
 Mais grâce à ce projet, j'ai acquis de l’expérience en Angular.*
