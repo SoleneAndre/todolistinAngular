@@ -34,8 +34,17 @@ J'ai donc crée un projet puis demander une clé API Google Map, et ensuite acti
 J'ai rencontré quelques difficultés pour implémenter au mieux cette map, notamment lorsque l'utilisateur entre une adresse, il fallait récupérer la latitude ainsi que la longitude, il a été difficile de trouver une fonction et ensuite de la positioner sur la map. De plus , il a été difficile de trouver comment utiliser cet API au sein d'une Todolist. Au départ , j'avais positionné une seule carte , mais finalement j'ai trouve ça mieux de laisser le choix à l'utilisateur pour chacun de ses items._
 
 __ 2. Reconnaissance vocale __ 
-_ ._
+_ J'ai tout d'abord utilisé une librairie nommée Annyang, qui fonctionnait bien sauf que pour ajouter un item il fallait rappuyer sur le bouton et qu'on ne pouvait pas changer la langue. Après diverses recherches, j'ai supprimé Annyang de mon code, et j'ai ajouté la librairie ngx-speech-recognition, dote directement d'un Service faisant la liaison avec le component et dont on peut ajouter des fonctionnalités notamment la langue ou encore la grammaire. _
 
+La principale difficulte rencontrée a été au départ de savoir où implémenter la reconnaissance vocale, avec annyang il fallait directement la mettre dans index.html sinon ça ne fonctionnait pas. Donc ce n’était pas possible de directement ajouter la todoList. Il m'a fallu du temps avant de trouver une autre manière de faire fonctionner le code correctement , qu'il reconnaissance bien la voix et qu'il ajoute directement la todo.
+
+__ 2. Autre difficulté rencontrée  __ 
+
+Étant plutot novice en TypeScript , cela a été plutôt difficile au départ pour m’imprégner d'Angular et son fonctionnement. J'ai dû regarder beaucoup de tutos , passer beaucoup de temps pour comprendre chaque composant, les méthodes,etc...
+Mais grâce à ce projet, j'ai acquis de l’expérience en Angular.
+
+
+Concernant le Undo/Redo , le Effacer Tout et le local storage je n'ai pas rencontré de difficulté particulière.
 ## QUICK START 
 
 Clone the repo (or if you want download the Zip file):
