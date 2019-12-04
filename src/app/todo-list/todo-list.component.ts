@@ -1,5 +1,5 @@
 /// <reference types="@types/googlemaps" />
-import {ChangeDetectionStrategy, Component, NgZone, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
+import { Component, NgZone, Input, OnInit, ViewChild} from '@angular/core';
 import {TodoListData} from '../dataTypes/TodoListData';
 import {TodoItemData} from '../dataTypes/TodoItemData';
 import { TodoService } from '../todo.service';
@@ -45,7 +45,6 @@ export class TodoListComponent implements OnInit {
   private infoWindow: string;
   private geocoder: any;
   private filtre: string;
-  public started = false;
   public message = '';
 
   constructor(private todoService: TodoService, public mapsApiLoader: MapsAPILoader,    private service: SpeechRecognitionService,
@@ -101,7 +100,7 @@ this.service.onresult = (e) => {
         draggable: true
       }
     },
-    map : new google.maps.Geocoder()
+    map : new google.maps.Geocoder(),
   });
   }
   }
@@ -171,12 +170,10 @@ this.service.onresult = (e) => {
         }
         }
         start() {
-          this.started = true;
           this.service.start();
         }
 
         stop() {
-          this.started = false;
           this.service.stop();
         }
 

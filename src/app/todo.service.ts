@@ -4,8 +4,9 @@ import {TodoItemData} from './dataTypes/TodoItemData';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {  AgmMap, MapsAPILoader} from '@agm/core';
-import {  ViewChild, ElementRef, NgZone} from '@angular/core';
+import {  ViewChild, NgZone} from '@angular/core';
 import {  GoogleMapsAPIWrapper } from '@agm/core';
+import { stringify } from '@angular/compiler/src/util';
 
 declare var google: any;
 
@@ -29,7 +30,6 @@ export class TodoService {
 });
     this.todoListSubject.value.items = this.getLocalStorageItemsTodolist();
     this.AnnulerRetablir[0] = this.todoListSubject.value.items ;
-
    }
 
    getTodoListDataObserver(): Observable<TodoListData> {
@@ -44,6 +44,12 @@ export class TodoService {
     return localStorageMap == null ? [] : localStorageMap.map;
 
   }
+  setlocalStoragevillemap(adresse: string) {
+  localStorage.setItem('ville', JSON.stringify('https://www.google.com/maps/search/?api=1&query=' + adresse));
+}
+getlocalStoragevillemap() {
+  return JSON.parse(localStorage.getItem('ville'));
+}
   setLocalStorageItemsTodolist(items: TodoItemData[] ): void {
     localStorage.setItem('items', JSON.stringify({ items: items }));
   }
@@ -68,7 +74,9 @@ export class TodoService {
             lng: 5.7,
             draggable: true
           }
-        }, map : new google.maps.Geocoder()}
+        }, map : new google.maps.Geocoder(),
+        ville : ''
+    }
         )
     )});
       this.setLocalStorageItemsTodolist(this.todoListSubject.value.items);
@@ -124,7 +132,8 @@ export class TodoService {
             lng: 5.7,
             draggable: true
           }
-        }, map : new google.maps.Geocoder()
+        }, map : new google.maps.Geocoder(),
+        ville : ''
     }) ) });
     }
 

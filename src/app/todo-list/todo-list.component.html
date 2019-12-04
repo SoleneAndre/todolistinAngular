@@ -1,5 +1,4 @@
 
-
   <header >
       <h1>TodoList du jour</h1>
 
@@ -13,8 +12,7 @@
                 alt="microphone"
         height="50px"
         width="50px"    (click)="start()"         >
-            <button [disabled]="!started" (click)="stop()">end</button>
-                
+            <button (click)="stop()">end</button>
                 </div>
       </form>
 
@@ -29,7 +27,6 @@
       Tout cocher
     </div>
   <table>
-  
             <app-todo-item [data]="item"
             *ngFor="let item of getitemfiltre()" class= 'todo-item' [ngClass]="{'checker' : item.check}" [class.edite]="cItem.edite"
              #cItem>

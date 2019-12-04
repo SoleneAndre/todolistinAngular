@@ -35,12 +35,13 @@ export class TodoItemComponent implements OnInit {
       draggable: true
     }
   };
+  private ajoutville = true;
+
   @ViewChild('inputData', {static: false}) newTextInput: ElementRef;
   @ViewChild('gSearch', {static: false}) formSearch;
   @ViewChild('searchKey', {static: false}) hiddenSearchHandler;
   @ViewChild('gMap', {static: false}) gmapElement: any;
   @ViewChild(AgmMap, {static: false}) map: AgmMap;
-  ajoutville: boolean;
 
 
   constructor(private todoService: TodoService,
@@ -67,6 +68,22 @@ export class TodoItemComponent implements OnInit {
     console.log($event);
     this.data.location.marker.lat = $event.coords.lat;
     this.data.location.marker.lng = $event.coords.lng;
+    const latlng = {lat: $event.coords.lat, lng:  $event.coords.lng};
+    this.geocoder.geocode({'location': latlng}, function(results, status) {
+
+
+      if (status === 'OK') {
+        if (results[0]) {
+          // tslint:disable-next-line: no-shadowed-variable
+          const res = results[0].formatted_address;
+          const span = document.getElementById('villechange');
+            span.innerHTML = '' + res;
+       }
+      }
+
+});
+console.log(this.adresse);
+
   }
 
   ajoutVille() {
@@ -100,7 +117,10 @@ export class TodoItemComponent implements OnInit {
     this.data.location.marker.lat = this.location.lat;
     this.data.location.marker.lng = this.location.lng;
   this.ajoutville = false;
-  this.lienGoogle = 'https://www.google.com/maps/search/?api=1&query=' + this.adresse;
+  // this.lienGoogle = 'https://www.google.com/maps/search/?api=1&query=' + this.adresse;
+  this.todoService.setlocalStoragevillemap(this.adresse);
+  this.lienGoogle = this.todoService.getlocalStoragevillemap();
+  this.data.ville = this.adresse;
   console.log(this.lienGoogle);
     }
   }
@@ -121,6 +141,10 @@ setedite(valeur: boolean) {
     this.todoService.setTodosLabel(label, this.data);
   }
 
+  getville(): string {
+   return this.data.ville;
+  }
+
   getIsCheck(): boolean {
   return this.data.check;
   }
@@ -134,7 +158,7 @@ this.todoService.supprimerTodos(true, this.data);
 
   }
 voirVille() {
-  return false;
+  this.todoService.getlocalStoragevillemap();
 }
 ajoutVilletrue() {
   return true;

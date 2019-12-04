@@ -16,4 +16,5 @@ export class TodoItemData {
     }
   };
   map?;
+  ville?: string;
 }

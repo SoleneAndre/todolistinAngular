@@ -13,9 +13,9 @@
   <div class="view"> 
 <tr>
      <td>  <label class = 'todolabel' *ngIf="!edite; else editeTodo" (dblclick) = "setedite(true)" >{{getlabel()}} </label>
-      <input [hidden]= "ajoutville" type ="button" value="Ajout Ville" (click)= "ajoutVille()"/>
-     <!-- // <input type="button" value="voir Ville" (click) = "voirVille()"/> -->
-      <a *ngIf = "ajoutville===false" href= {{lienGoogle}}> Voir ville</a>
+      <input *ngIf = "ajoutville===true" type ="button" value="Ajout Ville" (click)= "ajoutVille()"/>      
+      <a *ngIf = "ajoutville===false" href= {{lienGoogle}}  target="_blank"> Voir ville</a>
+    <p *ngIf = "ajoutville===false" id="villechange">La ville de ce todo est : {{getville()}}</p>
                 <ng-template #editeTodo>
                     <input #inputData name = "inputData" type="text" class="todo-edite" [(ngModel)] = "item.label" (blur)="editeItem(inputData.value)" (keyup.enter)="editeItem(inputData.value)" (keyup.esc)="QuitterEdite(inputData.value)" autofocus>
                   </ng-template>
@@ -31,7 +31,6 @@
                   [ngModel] = "getIsCheck()"
                   (ngModelChange) = "setIsCheck($event)"
           />
-
 </div>
 
 
