@@ -3,11 +3,9 @@ import {TodoListData} from './dataTypes/TodoListData';
 import {TodoItemData} from './dataTypes/TodoItemData';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {TodoItemComponent} from './todo-item/todo-item.component';
-import { Marker, Location } from './dataTypes/map';
-import { MouseEvent, AgmMap, MapsAPILoader} from '@agm/core';
-import { Component, OnInit, Input, ViewChild, ElementRef, NgZone} from '@angular/core';
-import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
+import {  AgmMap, MapsAPILoader} from '@agm/core';
+import {  ViewChild, ElementRef, NgZone} from '@angular/core';
+import {  GoogleMapsAPIWrapper } from '@agm/core';
 
 declare var google: any;
 

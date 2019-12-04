@@ -8,11 +8,13 @@
 
           <button type="submit" class="add">Ajouter</button>
                 <div>
+            
                 <img style="margin-top:-50px" src="./assets/img/micro.svg" 
                 alt="microphone"
         height="50px"
-        width="50px"
-                (click)="voiceSearch()" id ="iconic-mic"/> 
+        width="50px"    (click)="start()"         >
+            <button [disabled]="!started" (click)="stop()">end</button>
+                
                 </div>
       </form>
 

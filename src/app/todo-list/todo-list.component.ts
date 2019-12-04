@@ -3,14 +3,13 @@ import {ChangeDetectionStrategy, Component, NgZone, Input, OnInit, ViewChild, El
 import {TodoListData} from '../dataTypes/TodoListData';
 import {TodoItemData} from '../dataTypes/TodoItemData';
 import { TodoService } from '../todo.service';
-import { MouseEvent, AgmMap, MapsAPILoader} from '@agm/core';
-import { Marker } from '../dataTypes/map';
-import { Location } from '../dataTypes/map';
-import { templateJitUrl } from '@angular/compiler';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
-import SpeechRecognizer from 'simple-speech-recognition';
-import { VirtualTimeScheduler } from 'rxjs';
+import { AgmMap, MapsAPILoader} from '@agm/core';
+import {  GoogleMapsAPIWrapper } from '@agm/core';
+import {
+  SpeechRecognitionLang,
+  SpeechRecognitionMaxAlternatives,
+  SpeechRecognitionService,
+} from '@kamiazya/ngx-speech-recognition';
 
 type FonctionFiltreItem = (item: TodoItemData) => boolean;
 // declare var webkitSpeechRecognition: any;
@@ -20,6 +19,17 @@ declare var google: any;
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.css'],
+  providers: [
+    {
+      provide: SpeechRecognitionLang,
+      useValue: 'fr-FR',
+    },
+    {
+      provide: SpeechRecognitionMaxAlternatives,
+      useValue: 1,
+    },
+    SpeechRecognitionService,
+  ],
 })
 
 
@@ -36,8 +46,10 @@ export class TodoListComponent implements OnInit {
   private infoWindow: string;
   private geocoder: any;
   private filtre: string;
+  public started = false;
+  public message = '';
 
-  constructor(private todoService: TodoService, public mapsApiLoader: MapsAPILoader,
+  constructor(private todoService: TodoService, public mapsApiLoader: MapsAPILoader,    private service: SpeechRecognitionService,
     private zone: NgZone,
     private wrapper: GoogleMapsAPIWrapper) {
     this.mapsApiLoader = mapsApiLoader;
@@ -46,13 +58,23 @@ export class TodoListComponent implements OnInit {
     this.mapsApiLoader.load().then(() => {
     this.geocoder = new google.maps.Geocoder();
 });
-}
+console.log('SubComponent', this.service);
+// verifie si il y a bien la liaison entre le service et le component.
+    this.service.onstart = (e) => {
+      console.log('onstart');
+}; // le service se met en route
+this.service.onresult = (e) => {
+  this.message = e.results[0].item(0).transcript;
+  this.addTodo(this.message);
+  console.log('SubComponent:onresult', this.message, e);
+}; // le this.message est le message qu on a dit a haute voix. On l'ajoute a la todolist et on verifie via la console
+
+    }
     filterCheck: FonctionFiltreItem = item => item.check;
     filterUnCheck: FonctionFiltreItem = item => !item.check;
     filterAll: FonctionFiltreItem = () => true;
   // tslint:disable-next-line: member-ordering
   filtreCourant: FonctionFiltreItem = this.filterAll;
-
   ngOnInit() {
     this.filtre = 'toutes';
   }
@@ -149,14 +171,14 @@ export class TodoListComponent implements OnInit {
             this.todoService.setTodosCheck(check, AnnulerRetablir, this.data.items[i] );
         }
         }
+        start() {
+          this.started = true;
+          this.service.start();
+        }
 
-   voiceSearch() {
-  const speechRecognizer = new SpeechRecognizer({
-      resultCallback: ({ transcript, finished }) => this.addTodo(transcript)
-  , lang: 'en-US'
-}
-);
-speechRecognizer.start();
+        stop() {
+          this.started = false;
+          this.service.stop();
+        }
 
-   }
   }
