@@ -19,10 +19,8 @@ Veuillez trouver ci-dessous les liens des différentes API utilisées:
 
 nom API | Lien
 ------------ | -------------
-Google Maps API | [Ici](https://cloud.google.com/maps-platform/?hl=fr
-)
-Ngx Speech Recognition  | [Ici](https://www.npmjs.com/package/@kamiazya/ngx-speech-recognition
-)
+Google Maps API | [Ici](https://cloud.google.com/maps-platform/?hl=fr)
+Ngx Speech Recognition  | [Ici](https://www.npmjs.com/package/@kamiazya/ngx-speech-recognition)
 
 
 ## QUICK START 
