@@ -11,7 +11,7 @@ AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs
 Diverses fonctionnalités sont présentes telles que : 
 Undo/Redo, Effacer Tout , Reconnaissance vocale, Sérialisation / Déserialisation (LocalStorage), Geolocalisation.
 
-Concernant la geolocalisation j'ai choisi de l'implementer avec Google Map. 
+Concernant la géolocalisation j'ai choisi de l'implémenter avec Google Map. 
 
 Pour la Reconnaissance vocale, j'ai utilisé un module existant nommé ngx-speech-recognition. 
 
@@ -21,6 +21,10 @@ nom API | Lien
 ------------ | -------------
 Google Maps API | [Ici](https://cloud.google.com/maps-platform/?hl=fr)
 Ngx Speech Recognition  | [Ici](https://www.npmjs.com/package/@kamiazya/ngx-speech-recognition)
+
+### Détails sur chaque fonctionnalité 
+
+:earth_americas: **bold** 1.  Map Google
 
 
 ## QUICK START 
