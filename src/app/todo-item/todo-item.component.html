@@ -1,24 +1,31 @@
 
 <div>
+          <!-- generation de la google map via le script -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs&callback=initMap">
     </script>
     <agm-map *ngIf = "ajoutville===false" [(latitude)]="location.lat" [(longitude)]="location.lng" [(zoom)]="location.zoom" [disableDefaultUI]="true" [zoomControl]="true" [(fitBounds)]='location.viewport'>
     <agm-marker [(latitude)]="location.marker.lat" [(longitude)]="location.marker.lng" [markerDraggable]="location.marker.draggable" (dragEnd)='markerDragEnd($event)'>
+        <!-- marker google sur la carte on recupere la latitude et la longitude -->
       <agm-info-window #infoWindow [disableAutoPan]="true">
         {{getlabel()}}
       </agm-info-window>
+              <!-- lorsque l'on clique sur un marker ça affiche le nom de l'item -->
     </agm-marker>  
   </agm-map>
   </div>
   <div class="view"> 
 <tr>
-     <td>  <label class = 'todolabel' *ngIf="!edite; else editeTodo" (dblclick) = "setedite(true)" >{{getlabel()}} </label>
-      <input *ngIf = "ajoutville===true" type ="button" value="Ajout Ville" (click)= "ajoutVille()"/>      
+    <td>  <label class = 'todolabel' *ngIf="!edite; else editeTodo" (dblclick) = "setedite(true)" >{{getlabel()}} </label> 
+       <!-- affiche le lavale de l'item et is on double click on peut changer sa valeur -->
+       <input *ngIf = "ajoutville===true" type ="button" value="Ajout Ville" (click)= "ajoutVille()"/>    
+        <!--  on affiche seulement si on veut ajouter une première fois une ville  -->
       <a *ngIf = "ajoutville===false" href= {{lienGoogle}}  target="_blank"> Voir ville</a>
+              <!--  Une fois la ville enregistree on affiche le lien dans un nouvel onglet  -->
    <strong>La ville de ce todo est : </strong> <p *ngIf = "ajoutville===false" id="villechange">{{getville()}}</p>
                 <ng-template #editeTodo>
                     <input #inputData name = "inputData" type="text" class="todo-edite" [(ngModel)] = "item.label" (blur)="editeItem(inputData.value)" (keyup.enter)="editeItem(inputData.value)" (keyup.esc)="QuitterEdite(inputData.value)" autofocus>
-                  </ng-template>
+                  </ng-template>       
+   <!--  on met une ng template afin de faire la liasion avec le getlabel et modifier la valeur du label -->
  </td>
 <td>   
    <button [ngStyle]="{'background-color': 'black'}" (click) = "supprimer()">
@@ -31,6 +38,8 @@
                   [ngModel] = "getIsCheck()"
                   (ngModelChange) = "setIsCheck($event)"
           />
+                  <!--  lorsque l'on clique ca change le check  -->
+
 </div>
 
 

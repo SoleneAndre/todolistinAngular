@@ -3,12 +3,9 @@ import { MouseEvent, AgmMap, MapsAPILoader} from '@agm/core';
 import { Component, OnInit, Input, ViewChild, ElementRef, NgZone} from '@angular/core';
 import {TodoItemData} from '../dataTypes/TodoItemData';
 import {TodoService} from '../todo.service';
-import {TodoListData} from '../dataTypes/TodoListData';
-import { Marker } from '../dataTypes/map';
-import { AgmCoreModule, GoogleMapsAPIWrapper } from '@agm/core';
-import { Location } from '../dataTypes/map';
+import {  GoogleMapsAPIWrapper } from '@agm/core';
 
-declare var google: any;
+declare var google: any; // fait la liaison avec le javascript google
 
 @Component({
   selector: 'app-todo-item',
@@ -119,13 +116,13 @@ console.log(this.adresse); // on verifie l'adresse
     this.data.location.marker.lng = this.location.lng; //
   this.ajoutville = false; // on a termine d ajouter la ville si on veut modifier il faudra bouger le marker
   this.todoService.setlocalStoragevillemap(this.adresse); // on met a jour le local Storage avec le nom de la ville
-  this.lienGoogle = this.todoService.getlocalStoragevillemap(); // 
-  this.data.ville = this.adresse;
-  console.log(this.lienGoogle);
+  this.lienGoogle = this.todoService.getlocalStoragevillemap(); // l'attribut lienGoogle recupere l'adresse située dans le local storage
+  this.data.ville = this.adresse; // on met a jour l'item et son attribut ville avec la ville entrée sur le prompt
+  console.log(this.lienGoogle); // on verifie l'adresse dans la console
     }
   }
 
-setedite(valeur: boolean) {
+setedite(valeur: boolean) { // on edite le label de l'item 
     this.edite = valeur;
     if (valeur) {
       requestAnimationFrame(
@@ -133,50 +130,50 @@ setedite(valeur: boolean) {
     }
 
   }
-  getlabel(): string {
+  getlabel(): string { // retourne le label de l'item
   return this.data.label;
   }
 
-  setlabel(label: string) {
-    this.todoService.setTodosLabel(label, this.data);
+  setlabel(label: string) { // on met à jour le label de l'item via la valeur label
+    this.todoService.setTodosLabel(label, this.data); // on fait appel à la methode située dans le todoService
   }
 
-  getville(): string {
+  getville(): string { // retourne la valeur de l'attribut ville de l'item
    return this.data.ville;
   }
 
-  getIsCheck(): boolean {
+  getIsCheck(): boolean { // retourne true ou false si l'item est coché
   return this.data.check;
   }
 
-  setIsCheck(check: boolean) {
+  setIsCheck(check: boolean) { // met a jour l'attribut check a true ou false si on clique sur le bouton
 this.todoService.setTodosCheck(check, true, this.data);
   }
 
-  supprimer() {
+  supprimer() { // supprime l'item de la Todolist
 this.todoService.supprimerTodos(true, this.data);
 
   }
-voirVille() {
+voirVille() { // affiche la ville de l'item recuperer via le local Storage
   this.todoService.getlocalStoragevillemap();
 }
-ajoutVilletrue() {
-  return true;
+ajoutVilletrue() { // lorsque l'utilisateur a fini d'ajouter sa ville cela passe a false
+  return true; // utile pour cacher ou non les boutons relié à ajoutVille
 }
-  editeItem(value: string) {
-    value.trim();
+  editeItem(value: string) { // lorsque l'utilisateur clique double sur le label de l'item
+    value.trim(); // ca met a jour son label via la valeur contenue dans 'value'
     if (value !== '' ) {
     this.setlabel(value);
     this.edite = false;
      } else {
     this.setlabel(this.data.label);
-    this.edite = false;
+    this.edite = false; 
   }
   }
 
   QuitterEdite(value: string) {
 
-    this.setlabel(this.data.label);
+    this.setlabel(this.data.label); // pour quitter le mode edite lorsqu'il appuie sur la touche echap
     this.edite = false;
 }
 

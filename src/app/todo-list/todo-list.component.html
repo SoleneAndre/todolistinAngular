@@ -1,17 +1,19 @@
-
-  <header >
+<header >
       <h1>TodoList du jour</h1>
 
  <form (submit)="addTodo(inputData.value); inputData.value=''">
+   <!-- Ajouter un item grâce à la valeur de l'input -->
             <input #inputData name="inputData" class="new-todo" placeholder="Ajouter une nouvelle tâche" autofocus />
 
           <button type="submit" class="add">Ajouter</button>
                 <div>
-            
                 <img style="margin-top:-50px" src="./assets/img/micro.svg" 
                 alt="microphone"
         height="50px"
-        width="50px"    (click)="start()"         >
+        width="50px"    (click)="start()"     
+            >
+<!-- commencer a parler dans le micro -->
+
             <button (click)="stop()">end</button>
                 </div>
       </form>
@@ -27,6 +29,7 @@
       Tout cocher
     </div>
   <table>
+    <!-- Affichage de tout les items, et ajout de la classe checker si l'item est coche  -->
             <app-todo-item [data]="item"
             *ngFor="let item of getitemfiltre()" class= 'todo-item' [ngClass]="{'checker' : item.check}" [class.edite]="cItem.edite"
              #cItem>
