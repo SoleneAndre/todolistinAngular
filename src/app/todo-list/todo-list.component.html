@@ -18,13 +18,17 @@
                 </div>
       </form>
 
-
+ <!-- On annule l'action precedente -->
   <button type="button" 
 (click) = "Annuler()">&#8855; Annuler</button>
 
+ <!-- On rétablit l'action précédente si elle a ete supprimé par exemple -->
 <button type="button" 
 (click) = "Retablir()">&#8634; Rétablir</button>
+<!--  si vide retourne true, cad que si il n'y a pas de todo, la div n'est pas affiché -->
 <div [hidden] = "vide()">
+
+   <!-- si la méthode tousCheck() renvoie true si l item est checke (ou false si il nest pas checke) , si l'item est checke le changecheck() retournera à false et le décochera   -->
       <input type="checkbox" name="toggleAll" [ngModel]="tousCheck()" (click)="changeCheck()" >
       Tout cocher
     </div>
@@ -36,13 +40,15 @@
             </app-todo-item>
       </table>
 
-    <footer [hidden] = "vide()">
+    <footer [hidden] = "vide()"> <!-- on affiche seulement si il existe au moins une todo -->
       <span><strong></strong> {{tachesRestantes()}} {{affichagetache()}} </span>
             <table>
-                <tr><td><a class="filterAll" (click)="filtreCourant = filterAll" [class.selected]="currentFilter === filterAll">Tous</a></td>
+              <!-- quand on click ça change l'attribut filtrecourant. La classe sera selon la valeur de filtreCourant  -->
+                <tr><td><a class="filterAll" (click)="filtreCourant = filterAll" [class.selected]="filtreCourant === filterAll">Tous</a></td>
                     <td><a class="Activesfiltre" (click)="filtreCourant = filterUnCheck" [class.selected]="filtreCourant === filterUnCheck">Actifs</a></td>
                         <td> <a class="FiltreComplete" (click)="filtreCourant = filterCheck" [class.selected]="filtreCourant === filterCheck">Complétés</a></td>
                         </tr>
             </table>  
+             <!-- bouton affiché seulement si il y a au moins un item coché -->
       <button *ngIf="nbitemcoche()!==0" (click)="SuppTodoCoche()">Supprimer cochées</button>
   </footer>

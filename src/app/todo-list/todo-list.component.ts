@@ -110,19 +110,22 @@ this.service.onresult = (e) => {
   });
   }
   }
-
+// retourne le label
   gettodoLabel() {
     return this.dataitem.label;
   }
+
+// on met tout les attributs check des items à true
   tousCheck(): boolean {
     return this.getitems().reduce(
       (acc, item) => acc && item.check, true);
   }
 
+ // si il n'existe aucune todo
   vide() {
     return this.getitems().length === 0;
   }
-
+ // on supprime les todo coché
       SuppTodoCoche() {
         let AnnulerRetablir = false;
         for ( let i = 0; i < this.getitems().filter(item => item.check).length; i++ ) {
@@ -132,6 +135,7 @@ this.service.onresult = (e) => {
           this.supprimerTodo(this.getitems().filter(item => item.check)[i], AnnulerRetablir);
         }
        }
+       // on supprime le todo via la bouton 
        supprimerTodo(item: TodoItemData, AnnulerRetablir: boolean) {
           this.todoService.supprimerTodos(AnnulerRetablir, item);
         }
@@ -142,6 +146,7 @@ this.service.onresult = (e) => {
         Retablir(): void {
           this.todoService.Actionretablir();
         }
+
         getitemfiltre(): TodoItemData[] {
           return this.getitems().filter(this.filtreCourant);
         }
@@ -150,20 +155,25 @@ this.service.onresult = (e) => {
           return this.data.items.reduce(
             (acc, item) => acc + (item.check ? 1 : 0), 0 );
         }
+
+        // nombre de taches restantes suivant le nombre de todo cocheé ou non
         tachesRestantes(): number {
              return this.getitems().filter(todo => !todo.check).length;
                }
+
+               // juste pour gerer les "s" si il y a une tâche ou plusieurs tâches
         affichagetache() {
-          if (this.tachesRestantes() > 1 ) {
+           if (this.tachesRestantes() > 1 ) {
             return 'Tâches restantes';
           } else {
               return 'Tâche restante';
             }
         }
+
         setTodoCheck(item: TodoItemData, check: boolean, edite: boolean) {
           this.todoService.setTodosCheck(check, true, item);
         }
-
+// 
         changeCheck() {
           const check = !this.tousCheck();
           let AnnulerRetablir = false;

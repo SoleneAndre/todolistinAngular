@@ -21,7 +21,7 @@
         <!--  on affiche seulement si on veut ajouter une première fois une ville  -->
       <a *ngIf = "ajoutville===false" href= {{lienGoogle}}  target="_blank"> Voir ville</a>
               <!--  Une fois la ville enregistree on affiche le lien dans un nouvel onglet  -->
-   <strong>La ville de ce todo est : </strong> <p *ngIf = "ajoutville===false" id="villechange">{{getville()}}</p>
+   <strong *ngIf = "ajoutville===false" >La ville de ce todo est : </strong> <p *ngIf = "ajoutville===false" id="villechange">{{getville()}}</p>
                 <ng-template #editeTodo>
                     <input #inputData name = "inputData" type="text" class="todo-edite" [(ngModel)] = "item.label" (blur)="editeItem(inputData.value)" (keyup.enter)="editeItem(inputData.value)" (keyup.esc)="QuitterEdite(inputData.value)" autofocus>
                   </ng-template>       
