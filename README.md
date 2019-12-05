@@ -6,6 +6,8 @@ Ce projet est une TodoList implémentée en Angular 8. :blush:
 
 AIzaSyD3DfSPdWQKM2eqIN6PGpaR979Hz3NjSWs
 
+:warning: Lorsque l'on rajoute une ville , il faut attendre une vingtaine de secondes avant que la Map s'affiche. 
+
 ## Liste des fonctionnalités développées :computer:
 
 Diverses fonctionnalités sont présentes telles que : 
