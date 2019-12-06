@@ -78,12 +78,19 @@ export class TodoItemComponent implements OnInit {
             span.innerHTML = '' + res;
        }
       }
+    });
+    const elt = document.getElementById('villechange'); 
+    const monTexte = elt.textContent; // on recupere le texte contenu dans 'ville change'
+    // on met a jour le local Storage avec le nom de la nouvelle adresse qu'on a nous-même drag avec le marker
+    this.lienGoogle = this.todoService.getlocalStoragevillemap(); //
+    this.todoService.setlocalStoragevillemap(monTexte);
+    this.data.ville = monTexte; // desormais la ville de l'item s'adaptera lorqu'on bouge le marker sur la carte
 
-});
-console.log(this.adresse); // on verifie l'adresse
+    this.getville();
+    console.log(this.adresse); // on verifie l'adresse
 
-  }
-
+      }
+      
   ajoutVille() { // ajouter une ville à l'item
     const val = confirm('Voulez-vous ajouter une localisation?');
     if (val === true) { // si l'utilisateur repond ok
