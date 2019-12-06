@@ -1,5 +1,5 @@
 /// <reference types="@types/googlemaps" />
-import {ChangeDetectionStrategy, Component, NgZone, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
+import { Component, NgZone, Input, OnInit, ViewChild} from '@angular/core';
 import {TodoListData} from '../dataTypes/TodoListData';
 import {TodoItemData} from '../dataTypes/TodoItemData';
 import { TodoService } from '../todo.service';
@@ -12,8 +12,7 @@ import {
 } from '@kamiazya/ngx-speech-recognition';
 
 type FonctionFiltreItem = (item: TodoItemData) => boolean;
-// declare var webkitSpeechRecognition: any;
-declare var google: any;
+declare var google: any; // fait la liaison avec le javascript google
 
 @Component({
   selector: 'app-todo-list',
@@ -40,13 +39,13 @@ export class TodoListComponent implements OnInit {
   @ViewChild(AgmMap, {static: false}) map: AgmMap;
 
   @Input()
+    // déclaration de tout les attributs ou objets dont on aura besoin
   private data: TodoListData;
   private dataitem: TodoItemData;
   itemLabel: any;
   private infoWindow: string;
   private geocoder: any;
   private filtre: string;
-  public started = false;
   public message = '';
 
   constructor(private todoService: TodoService, public mapsApiLoader: MapsAPILoader,    private service: SpeechRecognitionService,
@@ -58,18 +57,21 @@ export class TodoListComponent implements OnInit {
     this.mapsApiLoader.load().then(() => {
     this.geocoder = new google.maps.Geocoder();
 });
+
 console.log('SubComponent', this.service);
 // verifie si il y a bien la liaison entre le service et le component.
     this.service.onstart = (e) => {
       console.log('onstart');
 }; // le service se met en route
 this.service.onresult = (e) => {
-  this.message = e.results[0].item(0).transcript;
-  this.addTodo(this.message);
-  console.log('SubComponent:onresult', this.message, e);
+  this.message = e.results[0].item(0).transcript; // on affecte la retranscription de la voix dans l'attribut message
+  this.addTodo(this.message); // on ajoute une Todo avec omme label la retranscription de ce qu'on a dit 
+    console.log('SubComponent:onresult', this.message, e);
 }; // le this.message est le message qu on a dit a haute voix. On l'ajoute a la todolist et on verifie via la console
 
     }
+
+// en fonction de si la Todo est cocheé ou non elle apparaitra dans le filtre correspondant
     filterCheck: FonctionFiltreItem = item => item.check;
     filterUnCheck: FonctionFiltreItem = item => !item.check;
     filterAll: FonctionFiltreItem = () => true;
@@ -79,6 +81,7 @@ this.service.onresult = (e) => {
     this.filtre = 'toutes';
   }
 
+// si le label existe on retourne le label sinon il est vide
   getlabel(): string {
     return this.data ? this.data.label : '';
   }
@@ -87,6 +90,7 @@ this.service.onresult = (e) => {
     return this.data ? this.data.items : [];
   }
 
+  // Ajouter la todo avec la methode situe dans Service permettant de faire le MVC
   addTodo(todoLabel: string) {
       if (todoLabel) {
   this.todoService.addTodos({
@@ -102,24 +106,26 @@ this.service.onresult = (e) => {
         draggable: true
       }
     },
-    map : new google.maps.Geocoder()
+    map : new google.maps.Geocoder(),
   });
   }
   }
-
+// retourne le label
   gettodoLabel() {
     return this.dataitem.label;
   }
+
+// on met tout les attributs check des items à true
   tousCheck(): boolean {
     return this.getitems().reduce(
       (acc, item) => acc && item.check, true);
   }
-  infoWindows() {
-    return this.infoWindow;
-  }
+
+ // si il n'existe aucune todo
   vide() {
     return this.getitems().length === 0;
   }
+ // on supprime les todo coché
       SuppTodoCoche() {
         let AnnulerRetablir = false;
         for ( let i = 0; i < this.getitems().filter(item => item.check).length; i++ ) {
@@ -129,6 +135,7 @@ this.service.onresult = (e) => {
           this.supprimerTodo(this.getitems().filter(item => item.check)[i], AnnulerRetablir);
         }
        }
+       // on supprime le todo via la bouton 
        supprimerTodo(item: TodoItemData, AnnulerRetablir: boolean) {
           this.todoService.supprimerTodos(AnnulerRetablir, item);
         }
@@ -139,6 +146,7 @@ this.service.onresult = (e) => {
         Retablir(): void {
           this.todoService.Actionretablir();
         }
+
         getitemfiltre(): TodoItemData[] {
           return this.getitems().filter(this.filtreCourant);
         }
@@ -147,20 +155,25 @@ this.service.onresult = (e) => {
           return this.data.items.reduce(
             (acc, item) => acc + (item.check ? 1 : 0), 0 );
         }
+
+        // nombre de taches restantes suivant le nombre de todo cocheé ou non
         tachesRestantes(): number {
              return this.getitems().filter(todo => !todo.check).length;
                }
+
+               // juste pour gerer les "s" si il y a une tâche ou plusieurs tâches
         affichagetache() {
-          if (this.tachesRestantes() > 1 ) {
+           if (this.tachesRestantes() > 1 ) {
             return 'Tâches restantes';
           } else {
               return 'Tâche restante';
             }
         }
+
         setTodoCheck(item: TodoItemData, check: boolean, edite: boolean) {
           this.todoService.setTodosCheck(check, true, item);
         }
-
+// 
         changeCheck() {
           const check = !this.tousCheck();
           let AnnulerRetablir = false;
@@ -171,13 +184,12 @@ this.service.onresult = (e) => {
             this.todoService.setTodosCheck(check, AnnulerRetablir, this.data.items[i] );
         }
         }
+        // commencer a parler dans le micro et fait appel a une methode dans le service du package
         start() {
-          this.started = true;
           this.service.start();
         }
 
         stop() {
-          this.started = false;
           this.service.stop();
         }
 
