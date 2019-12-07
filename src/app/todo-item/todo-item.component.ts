@@ -85,9 +85,6 @@ export class TodoItemComponent implements OnInit {
     this.todoService.setlocalStoragevillemap(monTexte);
     this.lienGoogle = this.todoService.getlocalStoragevillemap(); //
     this.data.ville = monTexte; // desormais la ville de l'item s'adaptera lorqu'on bouge le marker sur la carte
-    console.log(this.adresse); // on verifie l'adresse
-
-    this.getville();
 
       }
 
